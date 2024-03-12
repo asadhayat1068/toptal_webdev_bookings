@@ -3,8 +3,8 @@ package main
 import (
 	"net/http"
 
-	"github.com/asadhayat1068/toptal_webdev_bookings/pkg/config"
-	"github.com/asadhayat1068/toptal_webdev_bookings/pkg/handlers"
+	"github.com/asadhayat1068/toptal_webdev_bookings/internal/config"
+	"github.com/asadhayat1068/toptal_webdev_bookings/internal/handlers"
 	"github.com/go-chi/chi/v4"
 	"github.com/go-chi/chi/v4/middleware"
 )
@@ -32,8 +32,11 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Get("/about", handlers.Repo.About)
 	mux.Get("/generals-quarters", handlers.Repo.Generals)
 	mux.Get("/majors-suits", handlers.Repo.Majors)
+
 	mux.Get("/search-availability", handlers.Repo.Availability)
 	mux.Post("/search-availability", handlers.Repo.PostAvailability)
+	mux.Post("/search-availability-json", handlers.Repo.AvailabilityJSON)
+
 	mux.Get("/contact", handlers.Repo.Contact)
 	mux.Get("/make-reservation", handlers.Repo.Reservation)
 

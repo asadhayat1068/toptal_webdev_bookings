@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"path/filepath"
 
-	"github.com/asadhayat1068/toptal_webdev_bookings/pkg/config"
-	"github.com/asadhayat1068/toptal_webdev_bookings/pkg/models"
+	"github.com/asadhayat1068/toptal_webdev_bookings/internal/config"
+	"github.com/asadhayat1068/toptal_webdev_bookings/internal/models"
 	"github.com/justinas/nosurf"
 )
 

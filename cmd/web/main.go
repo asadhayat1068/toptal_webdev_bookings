@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/alexedwards/scs/v2"
-	"github.com/asadhayat1068/toptal_webdev_bookings/pkg/config"
-	"github.com/asadhayat1068/toptal_webdev_bookings/pkg/handlers"
-	"github.com/asadhayat1068/toptal_webdev_bookings/pkg/render"
+	"github.com/asadhayat1068/toptal_webdev_bookings/internal/config"
+	"github.com/asadhayat1068/toptal_webdev_bookings/internal/handlers"
+	"github.com/asadhayat1068/toptal_webdev_bookings/internal/render"
 )
 
 const PORT = ":8080"
