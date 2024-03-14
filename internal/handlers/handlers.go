@@ -87,6 +87,10 @@ func (p *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	p.App.Session.Put(r.Context(), "reservation", reservation)
+
+	http.Redirect(w, r, "/reservation-summary", http.StatusSeeOther)
+
 }
 
 // Generals renders the generals page
@@ -135,4 +139,21 @@ func (p *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 // Contact renders the availability page
 func (p *Repository) Contact(w http.ResponseWriter, r *http.Request) {
 	render.RenderTemplate(w, r, "contact", &models.TemplateData{})
+}
+
+// ReservationSummary
+func (p *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
+	reservation, ok := p.App.Session.Get(r.Context(), "reservation").(models.Reservation)
+	if !ok {
+		log.Println("Cannot get reservation data from session")
+		p.App.Session.Put(r.Context(), "error", "Cannot find reservation data")
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		return
+	}
+	p.App.Session.Remove(r.Context(), "reservation")
+	data := make(map[string]any)
+	data["reservation"] = reservation
+	render.RenderTemplate(w, r, "reservation-summary", &models.TemplateData{
+		Data: data,
+	})
 }

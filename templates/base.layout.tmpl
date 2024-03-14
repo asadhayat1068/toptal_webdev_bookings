@@ -210,6 +210,18 @@
 
         }
 
+        {{with .Error}}
+          notify("{{.}}", "error")
+        {{end}}
+
+        {{with .Warning}}
+          notify("{{.}}", "warning")
+        {{end}}
+        
+        {{with .Flash}}
+          notify("{{.}}", "success")
+        {{end}}
+
         async function custom(c) {
             const {
                 msg = "",

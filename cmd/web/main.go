@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/gob"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,6 +10,7 @@ import (
 	"github.com/alexedwards/scs/v2"
 	"github.com/asadhayat1068/toptal_webdev_bookings/internal/config"
 	"github.com/asadhayat1068/toptal_webdev_bookings/internal/handlers"
+	"github.com/asadhayat1068/toptal_webdev_bookings/internal/models"
 	"github.com/asadhayat1068/toptal_webdev_bookings/internal/render"
 )
 
@@ -19,6 +21,8 @@ var app config.AppConfig
 var session *scs.SessionManager
 
 func main() {
+	// What to store in Session
+	gob.Register(models.Reservation{})
 	// Init App Configs
 	app.InProduction = false
 	session = scs.New()
