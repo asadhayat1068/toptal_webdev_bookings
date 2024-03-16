@@ -1,0 +1,25 @@
+mode: set
+github.com/asadhayat1068/toptal_webdev_bookings/internal/render/render.go:19.84,25.2 5 1
+github.com/asadhayat1068/toptal_webdev_bookings/internal/render/render.go:29.40,31.2 1 1
+github.com/asadhayat1068/toptal_webdev_bookings/internal/render/render.go:33.105,36.18 2 1
+github.com/asadhayat1068/toptal_webdev_bookings/internal/render/render.go:36.18,38.3 1 0
+github.com/asadhayat1068/toptal_webdev_bookings/internal/render/render.go:38.8,40.3 1 1
+github.com/asadhayat1068/toptal_webdev_bookings/internal/render/render.go:42.2,44.9 2 1
+github.com/asadhayat1068/toptal_webdev_bookings/internal/render/render.go:44.9,46.3 1 1
+github.com/asadhayat1068/toptal_webdev_bookings/internal/render/render.go:48.2,51.16 4 1
+github.com/asadhayat1068/toptal_webdev_bookings/internal/render/render.go:51.16,54.3 2 0
+github.com/asadhayat1068/toptal_webdev_bookings/internal/render/render.go:56.2,57.16 2 1
+github.com/asadhayat1068/toptal_webdev_bookings/internal/render/render.go:57.16,60.3 2 0
+github.com/asadhayat1068/toptal_webdev_bookings/internal/render/render.go:62.2,62.12 1 1
+github.com/asadhayat1068/toptal_webdev_bookings/internal/render/render.go:66.67,72.16 3 1
+github.com/asadhayat1068/toptal_webdev_bookings/internal/render/render.go:72.16,74.3 1 0
+github.com/asadhayat1068/toptal_webdev_bookings/internal/render/render.go:77.2,77.29 1 1
+github.com/asadhayat1068/toptal_webdev_bookings/internal/render/render.go:77.29,80.17 3 1
+github.com/asadhayat1068/toptal_webdev_bookings/internal/render/render.go:80.17,82.4 1 0
+github.com/asadhayat1068/toptal_webdev_bookings/internal/render/render.go:83.3,84.17 2 1
+github.com/asadhayat1068/toptal_webdev_bookings/internal/render/render.go:84.17,86.4 1 0
+github.com/asadhayat1068/toptal_webdev_bookings/internal/render/render.go:88.3,88.23 1 1
+github.com/asadhayat1068/toptal_webdev_bookings/internal/render/render.go:88.23,90.18 2 1
+github.com/asadhayat1068/toptal_webdev_bookings/internal/render/render.go:90.18,92.5 1 0
+github.com/asadhayat1068/toptal_webdev_bookings/internal/render/render.go:94.3,94.21 1 1
+github.com/asadhayat1068/toptal_webdev_bookings/internal/render/render.go:98.2,98.21 1 1
