@@ -8,6 +8,7 @@ import (
 
 	"github.com/asadhayat1068/toptal_webdev_bookings/internal/config"
 	"github.com/asadhayat1068/toptal_webdev_bookings/internal/forms"
+	"github.com/asadhayat1068/toptal_webdev_bookings/internal/helpers"
 	"github.com/asadhayat1068/toptal_webdev_bookings/internal/models"
 	"github.com/asadhayat1068/toptal_webdev_bookings/internal/render"
 )
@@ -30,19 +31,12 @@ func NewHandlers(r *Repository) {
 
 // Home renders the home page
 func (p *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	remoteIP := r.RemoteAddr
-	p.App.Session.Put(r.Context(), "remote_ip", remoteIP)
 	render.RenderTemplate(w, r, "home", &models.TemplateData{})
 }
 
 // About renders the about page
 func (p *Repository) About(w http.ResponseWriter, r *http.Request) {
-	stringMap := map[string]string{}
-	stringMap["test"] = "Hello Again!"
-	stringMap["remote_ip"] = p.App.Session.GetString(r.Context(), "remote_ip")
-	render.RenderTemplate(w, r, "about", &models.TemplateData{
-		StringMap: stringMap,
-	})
+	render.RenderTemplate(w, r, "about", &models.TemplateData{})
 }
 
 // Reservation renders the reservation page
@@ -60,7 +54,7 @@ func (p *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 func (p *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
-		log.Println(err)
+		helpers.ServerError(w, err)
 		return
 	}
 
@@ -129,7 +123,9 @@ func (p *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 
 	respAsJson, err := json.MarshalIndent(resp, "", "     ")
 	if err != nil {
+		helpers.ServerError(w, err)
 		log.Println(err)
+		return
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(respAsJson)
@@ -145,6 +141,7 @@ func (p *Repository) Contact(w http.ResponseWriter, r *http.Request) {
 func (p *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
 	reservation, ok := p.App.Session.Get(r.Context(), "reservation").(models.Reservation)
 	if !ok {
+		p.App.ErrorLog.Println("Cannot get reservation data from session")
 		log.Println("Cannot get reservation data from session")
 		p.App.Session.Put(r.Context(), "error", "Cannot find reservation data")
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)

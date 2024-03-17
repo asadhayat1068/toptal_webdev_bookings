@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/asadhayat1068/toptal_webdev_bookings/internal/config"
 	"github.com/asadhayat1068/toptal_webdev_bookings/internal/handlers"
+	"github.com/asadhayat1068/toptal_webdev_bookings/internal/helpers"
 	"github.com/asadhayat1068/toptal_webdev_bookings/internal/models"
 	"github.com/asadhayat1068/toptal_webdev_bookings/internal/render"
 )
@@ -17,7 +19,8 @@ import (
 const PORT = ":8080"
 
 var app config.AppConfig
-
+var InfoLog *log.Logger
+var ErrorLog *log.Logger
 var session *scs.SessionManager
 
 func main() {
@@ -43,6 +46,11 @@ func run() error {
 	gob.Register(models.Reservation{})
 	// Init App Configs
 	app.InProduction = false
+
+	InfoLog = log.New(os.Stdout, "INFO:\t", log.Ldate|log.Ltime)
+	ErrorLog = log.New(os.Stdout, "ERROR:\t", log.Ldate|log.Ltime|log.Lshortfile)
+	app.InfoLog = InfoLog
+	app.ErrorLog = ErrorLog
 	session = scs.New()
 	session.Lifetime = 24 * time.Hour
 	session.Cookie.Persist = true
@@ -65,6 +73,7 @@ func run() error {
 
 	// Init render
 	render.NewTemplates(&app)
+	helpers.NewHelpers(&app)
 
 	// Routes
 	// http.HandleFunc("/", handlers.Repo.Home)
