@@ -2,3 +2,4 @@
 .idea
 go.sum
 bookings
+database.yml
