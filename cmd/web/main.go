@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/gob"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -10,6 +9,7 @@ import (
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/asadhayat1068/toptal_webdev_bookings/internal/config"
+	"github.com/asadhayat1068/toptal_webdev_bookings/internal/driver"
 	"github.com/asadhayat1068/toptal_webdev_bookings/internal/handlers"
 	"github.com/asadhayat1068/toptal_webdev_bookings/internal/helpers"
 	"github.com/asadhayat1068/toptal_webdev_bookings/internal/models"
@@ -24,12 +24,13 @@ var ErrorLog *log.Logger
 var session *scs.SessionManager
 
 func main() {
-	err := run()
+	db, err := run()
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("Server is running at port", PORT)
-	// http.ListenAndServe(PORT, nil)
+	defer db.SQL.Close()
+
+	log.Println("Server is running at port", PORT)
 
 	srv := http.Server{
 		Addr:    PORT,
@@ -41,7 +42,7 @@ func main() {
 
 }
 
-func run() error {
+func run() (*driver.DB, error) {
 	// What to store in Session
 	gob.Register(models.Reservation{})
 	// Init App Configs
@@ -57,18 +58,23 @@ func run() error {
 	session.Cookie.Persist = app.InProduction
 	session.Cookie.SameSite = http.SameSiteLaxMode
 	app.Session = session
+	//Connect to database
+	log.Println("Connecting to database")
+	db, err := driver.ConnectSQL("host=localhost port=5432 dbname=bookings user=asad password=")
+	if err != nil {
+		log.Fatal("Cannot connect to database")
+	}
+	log.Println("Successfully connected to database")
 
 	tc, err := render.CreateTemplateCache()
 	if err != nil {
 		log.Fatal("Cannot create template cache")
-		return err
-
 	}
 	app.UseCache = false
 	app.TemplateCache = tc
 
 	// Init Handlers
-	repo := handlers.NewRepo(&app)
+	repo := handlers.NewRepo(&app, db)
 	handlers.NewHandlers(repo)
 
 	// Init render
@@ -79,5 +85,5 @@ func run() error {
 	// http.HandleFunc("/", handlers.Repo.Home)
 	// http.HandleFunc("/about", handlers.Repo.About)
 
-	return nil
+	return db, nil
 }

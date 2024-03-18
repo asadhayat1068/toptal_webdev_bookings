@@ -7,21 +7,26 @@ import (
 	"net/http"
 
 	"github.com/asadhayat1068/toptal_webdev_bookings/internal/config"
+	"github.com/asadhayat1068/toptal_webdev_bookings/internal/driver"
 	"github.com/asadhayat1068/toptal_webdev_bookings/internal/forms"
 	"github.com/asadhayat1068/toptal_webdev_bookings/internal/helpers"
 	"github.com/asadhayat1068/toptal_webdev_bookings/internal/models"
 	"github.com/asadhayat1068/toptal_webdev_bookings/internal/render"
+	"github.com/asadhayat1068/toptal_webdev_bookings/internal/repository"
+	"github.com/asadhayat1068/toptal_webdev_bookings/internal/repository/dbrepo"
 )
 
 var Repo *Repository
 
 type Repository struct {
 	App *config.AppConfig
+	DB  repository.DatabaseRepo
 }
 
-func NewRepo(a *config.AppConfig) *Repository {
+func NewRepo(a *config.AppConfig, db *driver.DB) *Repository {
 	return &Repository{
 		App: a,
+		DB:  dbrepo.NewPostgresRepo(db.SQL, a),
 	}
 }
 
