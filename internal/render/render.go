@@ -26,11 +26,11 @@ func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateDa
 
 var app *config.AppConfig
 
-func NewTemplates(a *config.AppConfig) {
+func NewRenderer(a *config.AppConfig) {
 	app = a
 }
 
-func RenderTemplate(w http.ResponseWriter, r *http.Request, tmpl string, td *models.TemplateData) error {
+func Template(w http.ResponseWriter, r *http.Request, tmpl string, td *models.TemplateData) error {
 	// create a template cache
 	var tc map[string]*template.Template
 	if app.UseCache {

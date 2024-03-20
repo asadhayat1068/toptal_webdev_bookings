@@ -31,6 +31,18 @@
                                id="last_name" autocomplete="off" type='text'
                                name='last_name' value="{{$res.LastName}}" required>
                     </div>
+                    
+                    <div>
+                      <label for="start_date">Start Date</label>
+                      <input type="text" name="start_date" id="start_date" class="form-control" />
+                    </div>
+                    
+                    <div>
+                      <label for="end_date">End Date</label>
+                      <input type="text" name="end_date" id="end_date" class="form-control" />
+                    </div>
+
+                    <input type="hidden" name="room_id" value="1" />
 
                     <div class="form-group">
                         <label for="email">Email:</label>

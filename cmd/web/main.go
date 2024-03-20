@@ -78,7 +78,7 @@ func run() (*driver.DB, error) {
 	handlers.NewHandlers(repo)
 
 	// Init render
-	render.NewTemplates(&app)
+	render.NewRenderer(&app)
 	helpers.NewHelpers(&app)
 
 	// Routes
