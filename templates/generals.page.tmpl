@@ -70,6 +70,7 @@ document.getElementById("check-availability-button").addEventListener("click", f
                 const rp = new DateRangePicker(elem, {
                     format: 'yyyy-mm-dd',
                     showOnFocus: true,
+                    minDate: new Date(),
                 })
             },
 
@@ -82,6 +83,7 @@ document.getElementById("check-availability-button").addEventListener("click", f
               let form = document.getElementById("check-availability-form");
               let formData = new FormData(form);
               formData.append("csrf_token", "{{.CSRFToken}}");
+              formData.append("room_id", "1");
 
               console.log({formData});
 
@@ -91,7 +93,21 @@ document.getElementById("check-availability-button").addEventListener("click", f
               })
               .then(response => response.json())
               .then(data => {
-                console.log("Data I got: ", data);
+                if (data.ok) {
+                  attention.custom({
+                    icon: "success",
+                    msg: '<p>Room is available!</p>'
+                        + '<p><a href="/book-room?id='
+                        + data.room_id
+                        + '&start=' + data.start_date
+                        + '&end=' + data.end_date
+                        + '" class="btn btn-primary">Book Now</a></p>'
+                  })
+                } else {
+                  attention.error({
+                    msg: "Room is not available"
+                  })
+                }
               });
             }
         });
