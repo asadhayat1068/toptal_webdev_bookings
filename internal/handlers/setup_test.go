@@ -8,11 +8,11 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"testing"
 	"time"
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/asadhayat1068/toptal_webdev_bookings/internal/config"
-	"github.com/asadhayat1068/toptal_webdev_bookings/internal/driver"
 	"github.com/asadhayat1068/toptal_webdev_bookings/internal/models"
 	"github.com/asadhayat1068/toptal_webdev_bookings/internal/render"
 	"github.com/go-chi/chi"
@@ -24,7 +24,7 @@ var app config.AppConfig
 var session *scs.SessionManager
 var pathToTemplates = "./../../templates"
 
-func getRoutes() http.Handler {
+func TestMain(m *testing.M) {
 	// What to store in Session
 	gob.Register(models.Reservation{})
 	// Init App Configs
@@ -46,17 +46,22 @@ func getRoutes() http.Handler {
 	app.ErrorLog = ErrorLog
 	app.TemplateCache = tc
 	app.UseCache = true
-	db, err := driver.ConnectSQL("host=localhost port=5432 dbname=bookings user=asad password=")
-	if err != nil {
-		log.Fatal("Cannot connect to database")
-	}
+	// db, err := driver.ConnectSQL("host=localhost port=5432 dbname=bookings user=asad password=")
+	// if err != nil {
+	// 	log.Fatal("Cannot connect to database")
+	// }
 	log.Println("Successfully connected to database")
 	// Init Handlers
-	repo := NewRepo(&app, db)
+	repo := NewTestRepo(&app)
 	NewHandlers(repo)
 
 	// Init render
 	render.NewRenderer(&app)
+	os.Exit(m.Run())
+}
+
+func getRoutes() http.Handler {
+
 	mux := chi.NewRouter()
 	// using Middlewares with chi
 	mux.Use(middleware.Recoverer)

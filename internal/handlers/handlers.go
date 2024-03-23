@@ -33,6 +33,13 @@ func NewRepo(a *config.AppConfig, db *driver.DB) *Repository {
 	}
 }
 
+func NewTestRepo(a *config.AppConfig) *Repository {
+	return &Repository{
+		App: a,
+		DB:  dbrepo.NewTestingRepo(a),
+	}
+}
+
 func NewHandlers(r *Repository) {
 	Repo = r
 }
@@ -51,12 +58,14 @@ func (p *Repository) About(w http.ResponseWriter, r *http.Request) {
 func (p *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 	reservation, ok := p.App.Session.Get(r.Context(), "reservation").(models.Reservation)
 	if !ok {
-		helpers.ServerError(w, errors.New("cannot get reservation data from session"))
+		p.App.Session.Put(r.Context(), "error", "cannot get reservation from session")
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
 	room, err := p.DB.GetRoomByID(reservation.RoomID)
 	if err != nil {
-		helpers.ServerError(w, err)
+		p.App.Session.Put(r.Context(), "error", "cannot find room!")
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
 	reservation.Room.RoomName = room.RoomName
