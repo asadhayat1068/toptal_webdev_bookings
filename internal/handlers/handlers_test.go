@@ -2,9 +2,11 @@ package handlers
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/asadhayat1068/toptal_webdev_bookings/internal/models"
@@ -36,6 +38,7 @@ var theTests = []struct {
 	// {"post-search-availability-json", "/search-availability-json", "POST", []postData{
 	// 	{key: "start", value: "2024-01-01"}, {key: "end", value: "2024-02-01"},
 	// }, http.StatusOK},
+
 	// {"post-make-reservation", "/make-reservation", "POST", []postData{
 	// 	{key: "first_name", value: "Json"},
 	// 	{key: "last_name", value: "Smith"},
@@ -101,10 +104,32 @@ func TestRepository_Reservation(t *testing.T) {
 	reservation.Room.ID = 100
 	session.Put(ctx, "reservation", reservation)
 	handler.ServeHTTP(rr, req)
-	// if rr.Code != http.StatusTemporaryRedirect {
-	// 	t.Errorf("reservation handler returned wrong response code: got %d, wanted %d", rr.Code, http.StatusOK)
-	// }
+	if rr.Code != http.StatusTemporaryRedirect {
+		t.Errorf("reservation handler returned wrong response code: got %d, wanted %d", rr.Code, http.StatusOK)
+	}
 
+}
+
+func TestRepository_PostReservation(t *testing.T) {
+	reqBody := "start=2050-01-01"
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "end=2050-01-02")
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "first_name=Jhon")
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "last_name=smith")
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "email=jhon@smith.com")
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "phone=48754745")
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "room_id=1")
+
+	req, _ := http.NewRequest("POST", "/make-reservation", strings.NewReader(reqBody))
+	ctx := getCtx(req)
+	req = req.WithContext(ctx)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(Repo.PostReservation)
+	handler.ServeHTTP(rr, req)
+	if rr.Code != http.StatusSeeOther {
+		t.Errorf("post reservation handler returned wrong response code: got %d, wanted %d", rr.Code, http.StatusSeeOther)
+	}
 }
 
 func getCtx(req *http.Request) context.Context {
