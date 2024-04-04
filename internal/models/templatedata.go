@@ -4,13 +4,14 @@ import "github.com/asadhayat1068/toptal_webdev_bookings/internal/forms"
 
 // TemplateData holds data sent from handlers to templates
 type TemplateData struct {
-	StringMap map[string]string
-	IntMap    map[int]int
-	FloatMap  map[float32]float32
-	Data      map[string]any
-	CSRFToken string
-	Flash     string
-	Warning   string
-	Error     string
-	Form      forms.Form
+	StringMap       map[string]string
+	IntMap          map[int]int
+	FloatMap        map[float32]float32
+	Data            map[string]any
+	CSRFToken       string
+	Flash           string
+	Warning         string
+	Error           string
+	Form            *forms.Form
+	IsAuthenticated int
 }

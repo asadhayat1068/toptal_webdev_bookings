@@ -29,6 +29,8 @@ func main() {
 		log.Fatal(err)
 	}
 	defer db.SQL.Close()
+	defer close(app.MailChan)
+	listenForMail()
 
 	log.Println("Server is running at port", PORT)
 
@@ -45,6 +47,11 @@ func main() {
 func run() (*driver.DB, error) {
 	// What to store in Session
 	gob.Register(models.Reservation{})
+
+	// Create mail channel
+	mailChan := make(chan models.MailData)
+	app.MailChan = mailChan
+
 	// Init App Configs
 	app.InProduction = false
 
@@ -68,7 +75,7 @@ func run() (*driver.DB, error) {
 
 	tc, err := render.CreateTemplateCache()
 	if err != nil {
-		log.Fatal("Cannot create template cache")
+		log.Fatal("Cannot create template cache", err)
 	}
 	app.UseCache = false
 	app.TemplateCache = tc
